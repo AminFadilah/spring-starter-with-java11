@@ -1,9 +1,6 @@
 package  com.example.eleven.controllers;
 
-import com.example.eleven.dto.ApiResponse;
-import com.example.eleven.dto.LoginRequest;
-import com.example.eleven.dto.LoginResponse;
-import com.example.eleven.dto.RegisterRequest;
+import com.example.eleven.dto.*;
 import com.example.eleven.models.User;
 import com.example.eleven.security.JwtUtil;
 import com.example.eleven.services.UserService;
@@ -26,15 +23,10 @@ public class AuthController {
 
     @Operation(summary = "Register new user")
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<User>> register(@RequestBody RegisterRequest request) {
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        user.setEmail(request.getEmail());
+    public ResponseEntity<ApiResponse<UserDto>> register(@RequestBody RegisterRequest request) {
+        UserDto createdUser = userService.register(request);
 
-        User createdUser = userService.register(user);
-
-        ApiResponse<User> response = new ApiResponse<>(
+        ApiResponse<UserDto> response = new ApiResponse<>(
                 HttpStatus.CREATED.value(),
                 "User registered successfully",
                 createdUser
@@ -46,16 +38,12 @@ public class AuthController {
     @Operation(summary = "Login user and get JWT token")
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
-        return userService.login(request.getUsername(), request.getPassword())
-                .map(user -> {
-                    LoginResponse loginResponse = new LoginResponse(jwtUtil.generateToken(user.getUsername()));
-                    ApiResponse<LoginResponse> response = new ApiResponse<>(
-                            HttpStatus.OK.value(),
-                            "Login successful",
-                            loginResponse
-                    );
-                    return ResponseEntity.ok(response);
-                })
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+        LoginResponse loginResponse = userService.login(request);
+        ApiResponse<LoginResponse> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Login successful",
+                loginResponse
+        );
+        return ResponseEntity.ok(response);
     }
 }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.modelmapper.ModelMapper;
 
 @Configuration
 public class OpenAPIConfig {
@@ -17,6 +18,11 @@ public class OpenAPIConfig {
 
     @Value("${spring.application.name}")
     private String appName;
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
     @Bean
     public OpenAPI customOpenAPI() {

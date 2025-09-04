@@ -1,8 +1,7 @@
 package com.example.eleven.controllers;
 
 import com.example.eleven.dto.ApiResponse;
-import com.example.eleven.dto.LoginResponse;
-import com.example.eleven.dto.UserResponse;
+import com.example.eleven.dto.UserDto;
 import com.example.eleven.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +19,10 @@ public class UserController {
         this.userService = userService;
     }
     @GetMapping("/getAll")
-    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUser() {
-        List<UserResponse> users = userService.getAllUser();
+    public ResponseEntity<ApiResponse<List<UserDto>>> getAllUser() {
+        List<UserDto> users = userService.getAllUser();
 
-        ApiResponse<List<UserResponse>> response = new ApiResponse<>(
+        ApiResponse<List<UserDto>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Successfully retrieved users",
                 users

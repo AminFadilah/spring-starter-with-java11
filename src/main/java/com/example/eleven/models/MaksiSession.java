@@ -1,34 +1,28 @@
 package com.example.eleven.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
-@Data
+@Table(name = "maksi_session")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-
+public class MaksiSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+    @Column
+    private LocalDate sessionDate;
 
-    @Column(nullable = false)
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "chosen_restaurant_id")
+    private Restaurant chosenRestaurant;
 
-    @Column(nullable = false)
-    private String email;
-
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Person person;
 }
